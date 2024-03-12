@@ -7,9 +7,11 @@ import okhttp3.WebSocketListener
 import okio.ByteString
 
 class PieSocketListener : WebSocketListener() {
+    lateinit var web_socket : WebSocket
+
     override fun onOpen(webSocket: WebSocket, response: Response) {
-        webSocket.send("Hello World!")
         Log.e("burak","baglandi")
+        web_socket = webSocket
     }
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {

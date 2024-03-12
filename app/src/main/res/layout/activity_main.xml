@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
         <variable
             name="optionID"
             type="Integer" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#B40353F4">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/top_card"
@@ -19,243 +21,426 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
+
             android:layout_height="124dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/hum"
-                    android:layout_width="24dp"
-                    android:layout_height="26dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/hum"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/himi"
+                    app:layout_constraintStart_toStartOf="@+id/progress_hum"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_hum"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_hum" />
+
+                <com.github.lzyzsd.circleprogress.ArcProgress
+                    android:id="@+id/progress_hum"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:textSize="10dp"
-                    android:id="@+id/top_card_date"
-                    android:layout_width="30dp"
-                    android:layout_height="58dp"
-                    android:gravity="center"
-                    android:text="50%"
-                    app:layout_constraintStart_toEndOf="@id/hum"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </TextView>
-
-                <ImageView
-                    android:id="@+id/hand"
-                    android:layout_width="23dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginBottom="14dp"
-                    android:src="@drawable/hand"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <ImageView
-                    android:id="@+id/kapl"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginBottom="44dp"
-                    android:src="@drawable/kapl"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:textSize="10dp"
-                    android:layout_height="62dp"
-                    android:layout_width="23dp"
-                    android:gravity="center"
-                    android:text="50%"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/space"
-                    app:layout_constraintStart_toEndOf="@id/hand">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/space"
-                    app:layout_constraintStart_toEndOf="@+id/top_card_date"
-                    android:gravity="center"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent">
-                </TextView>
-
-
-                <TextView
-                    android:id="@+id/top_card_temp"
-                    app:layout_constraintStart_toEndOf="@+id/space"
-                    android:text="12.3"
-                    android:gravity="center"
-                    android:textSize="55dp"
-                    android:layout_width="125dp"
-                    android:layout_height="match_parent">
-                </TextView>
-
-                <TextView
-                    android:id="@+id/space2"
-                    android:text="C"
-                    android:layout_marginTop="12dp"
-                    android:textSize="35dp"
-                    app:layout_constraintStart_toEndOf="@+id/top_card_temp"
-                    android:gravity="top"
-                    android:layout_width="25dp"
-                    android:layout_height="match_parent">
-                </TextView>
-
-                <ProgressBar
-                    android:id="@+id/pr_progress_in_circle"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    app:layout_constraintStart_toEndOf="@+id/space2"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:progress="60"
-                    android:progressDrawable="@drawable/progress"
-                    android:rotation="150" />
-
-                <TextView
-                    android:text="Water level"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginRight="26dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_width="100dp"
-                    android:gravity="center"
-                    android:layout_height="20dp"/>
-
-                <TextView
-                    android:text="64%"
-                    android:textSize="11dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-
-                    android:layout_marginRight="23dp"
-                    android:layout_marginBottom="52dp"
-                    android:layout_width="100dp"
-                    android:gravity="center"
-                    android:layout_height="20dp"/>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/mid_card"
-            android:layout_margin="18dp"
-            app:cardCornerRadius="15dp"
-            app:layout_constraintTop_toBottomOf="@+id/top_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/settings"
-                    android:textSize="25dp"
-                    android:text="Settings"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/top_layout"
+                    custom:arc_progress="87"
+                    app:arc_bottom_text_size="10dp"
+                    app:arc_text_size="25dp"
+                    app:arc_suffix_text_size="10dp"
+                    app:arc_text_color="@color/black"
+                    app:arc_finished_color="@color/black"
+                    app:arc_unfinished_color="#60000000"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-                <TextView
-                    android:layout_margin="10dp"
-                    android:id="@+id/temp"
-                    android:text="Temperature"
-                    android:textSize="30dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-
-                <Button
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/back"
-                    android:layout_width="49dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintStart_toEndOf="@id/temp"
-                    app:layout_constraintTop_toBottomOf="@id/settings" />
-
-                <TextView
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintStart_toEndOf="@id/temp"
-                    app:layout_constraintTop_toBottomOf="@id/settings"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/white"
-                    android:text="+"
-                    android:layout_width="49dp"
-                    android:layout_height="39dp"/>
-
-                <TextView
-                    android:layout_marginStart="75dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toEndOf="@id/temp"
-                    app:layout_constraintTop_toBottomOf="@id/settings"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="25dp"
-                    android:text="20"
-                    android:layout_width="49dp"
-                    android:layout_height="39dp"/>
-
-                <Button
-                    android:layout_marginTop="10dp"
-                    android:layout_width="49dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="130dp"
-                    app:layout_constraintStart_toEndOf="@id/temp"
-                    app:layout_constraintTop_toBottomOf="@id/settings" />
-
-                <TextView
-                    android:layout_marginStart="130dp"
-                    app:layout_constraintStart_toEndOf="@id/temp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/settings"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="20dp"
-                    android:text="-"
-                    android:layout_width="49dp"
-                    android:layout_height="39dp"/>
-
-                <TextView
-                    android:layout_margin="10dp"
-                    android:id="@+id/water_pump"
-                    android:text="Water pump"
-                    android:textSize="30dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <ToggleButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/water_pump" />
+                    />
 
+                <LinearLayout
+                    android:id="@+id/top_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/top_card_temp"
+                        android:text="12.3"
+                        android:gravity="center"
+                        android:textSize="55dp"
+                        android:layout_width="125dp"
+                        android:textColor="@color/black"
+                        android:layout_height="match_parent">
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/space2"
+                        android:text="C"
+                        android:layout_marginTop="12dp"
+                        android:textSize="35dp"
+                        android:gravity="top"
+                        android:layout_width="25dp"
+                        android:textColor="@color/black"
+                        android:layout_height="match_parent">
+                    </TextView>
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/level"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/sealevel"
+                    app:layout_constraintStart_toStartOf="@+id/progress_water"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_water"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_water" />
+
+                <com.github.lzyzsd.circleprogress.ArcProgress
+                    android:id="@+id/progress_water"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/top_layout"
+                    custom:arc_progress="30"
+                    app:arc_bottom_text_size="10dp"
+                    app:arc_text_size="25dp"
+                    app:arc_suffix_text_size="10dp"
+                    app:arc_text_color="@color/black"
+                    app:arc_finished_color="@color/black"
+                    app:arc_unfinished_color="#60000000"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/top_card"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Настройки"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black"
+                android:textSize="30dp"/>
+
+            <View
+                android:layout_height="3dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/temp"/>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/kap"/>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sun"/>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/lamp"/>
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:src="@drawable/cooler"/>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Автоматичекий режим"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+                <Switch
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchBarColor"
+                    android:layout_gravity="right"/>
+            </LinearLayout>
+
+            <View
+                android:layout_height="3dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Температура"
+                    android:textColor="@color/black"
+
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SeekBarColor"
+
+                    android:max="35"
+                    android:min="15"/>
+
+            </LinearLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Влажность"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SeekBarColor"
+                    android:max="35"
+                    android:min="15"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Освещенность"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SeekBarColor"
+
+                    android:max="35"
+                    android:min="15"/>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Вентилятор"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+                <Switch
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchBarColor"
+                    android:layout_gravity="right"/>
+            </LinearLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#B3B0B0"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Освещение"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+                <Switch
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchBarColor"
+                    android:layout_gravity="right"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/mid_card"-->
+<!--            android:layout_margin="18dp"-->
+<!--            app:cardCornerRadius="15dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/top_card"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/settings"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:text="Settings"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    android:gravity="start"-->
+<!--                    android:paddingStart="16dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"/>-->
+
+<!--                <View-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:background="#B3B0B0"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/settings" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_margin="10dp"-->
+<!--                    android:id="@+id/temp"-->
+<!--                    android:text="Temperature"-->
+<!--                    android:textSize="30dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/settings"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"/>-->
+
+<!--                <Button-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:id="@+id/back"-->
+<!--                    android:layout_width="49dp"-->
+<!--                    android:layout_height="39dp"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/temp"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/settings" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/temp"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/settings"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:text="+"-->
+<!--                    android:layout_width="49dp"-->
+<!--                    android:layout_height="39dp"/>-->
+
+<!--                <TextView-->
+<!--                    android:layout_marginStart="75dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/temp"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/settings"-->
+<!--                    android:gravity="center"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="25dp"-->
+<!--                    android:text="20"-->
+<!--                    android:layout_width="49dp"-->
+<!--                    android:layout_height="39dp"/>-->
+
+
+<!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="136dp"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    app:fabSize="mini"-->
+<!--                    app:borderWidth="12dp"-->
+<!--                    android:foregroundGravity="left|top"-->
+<!--                    android:src="@android:drawable/btn_star"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/temp"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/settings" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_margin="10dp"-->
+<!--                    android:id="@+id/water_pump"-->
+<!--                    android:text="Water pump"-->
+<!--                    android:textSize="30dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/temp"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"/>-->
+
+
+<!--                <Switch-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/water_pump"/>-->
+
+
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        </androidx.cardview.widget.CardView>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
