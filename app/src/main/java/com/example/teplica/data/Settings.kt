@@ -7,5 +7,6 @@ data class settings(
     val grass: Int,
     val cooling: Int, //bool
     val light: Int, //bool
-    val watering: Int //bool
+    val watering: Int, //bool
+    val auto_mode: Int //bool
 )
