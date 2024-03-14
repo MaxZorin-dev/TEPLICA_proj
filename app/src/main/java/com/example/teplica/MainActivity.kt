@@ -4,28 +4,30 @@ package com.example.teplica
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.example.teplica.data.settings
 import com.example.teplica.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+
+import com.warkiz.widget.IndicatorSeekBar
+import com.warkiz.widget.OnSeekChangeListener
+import com.warkiz.widget.SeekParams
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var ws:WebSocket
     private lateinit var chart: LineChart
+    private val defaultSettings = settings(24,90,0,0,0, 0)
 
 
     fun connect(){
@@ -42,15 +44,147 @@ class MainActivity : AppCompatActivity() {
         ws= client.newWebSocket(request, listener)
     }
 
+    fun setDefaultSettings(){
+        binding.temptext.text = defaultSettings.temp.toString()
+        binding.seektemp.setProgress(defaultSettings.temp)
+
+        binding.humText.text =defaultSettings.grass.toString()
+        binding.seekhum.setProgress(defaultSettings.grass)
+
+        binding.switchFan.setChecked(defaultSettings.cooling.toString().toBoolean())
+        binding.switchLight.setChecked(defaultSettings.light.toString().toBoolean())
+        binding.switchPump.setChecked(defaultSettings.watering.toString().toBoolean())
+    }
+
+    fun setPeopleSettings(settings: settings){
+        Log.d("mLog","${settings}")
+        binding.temptext.text = settings.temp.toString()
+        binding.seektemp.setProgress(settings.temp)
+
+        binding.humText.text =settings.grass.toString()
+        binding.seekhum.setProgress(settings.grass)
+
+        binding.switchFan.setChecked(settings.cooling.toString().toBoolean())
+        binding.switchLight.setChecked(settings.light.toString().toBoolean())
+        binding.switchPump.setChecked(settings.watering.toString().toBoolean())
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         chart = binding.lineChart
+        binding.switchPump.setChecked(true)
+
+        val settingsPeople = settings(15,0,0,0,0,0)
+
+        binding.seekhum.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
+                binding.humText.text = seek.progress.toString()
+                settingsPeople.grass = seek.progress
+            }
+
+            override fun onStartTrackingTouch(seek: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seek: SeekBar) {
+
+            }
+        })
+
+        binding.seektemp.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
+                binding.temptext.text = seek.progress.toString()
+                settingsPeople.temp = seek.progress
+            }
+
+            override fun onStartTrackingTouch(seek: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seek: SeekBar) {
+            }
+        })
+
+        binding.switchAuto.setOnClickListener {
+            if (binding.switchAuto.isChecked()) {
+                settingsPeople.auto_mode = 1
+                setDefaultSettings()
+            } else {
+//                settingsPeople.auto_mode = 0
+                setPeopleSettings(settingsPeople)
+            }
+        }
+
+        binding.switchFan.setOnClickListener {
+            if (binding.switchFan.isChecked()) {
+                settingsPeople.cooling = 1
+            } else {
+                settingsPeople.cooling = 0
+                Log.d("mLog","${settingsPeople}")
+            }
+        }
+
+        binding.switchLight.setOnClickListener {
+            if (binding.switchLight.isChecked()) {
+                settingsPeople.light = 1
+                Log.d("mLog","on")
+            } else {
+                settingsPeople.light = 0
+                Log.d("mLog","off")
+            }
+        }
+
+        binding.switchPump.setOnClickListener {
+            if (binding.switchPump.isChecked()) {
+                settingsPeople.watering = 1
+                Log.d("mLog","${settingsPeople}")
+            } else {
+                settingsPeople.watering = 0
+
+            }
+        }
+
+//
+//        humBar.setOnSeekChangeListener(object : OnSeekChangeListener {
+//            override fun onSeeking(seekParams: SeekParams) {
+//
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
+////                onStartTrackingTouch(seekBar)
+//            }
+//
+//            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {
+////                onStopTrackingTouch(seekBar)
+//            }
+//        })
 
         drawLineChart()
 
-        Log.d("mLog","1212")
+
+
+
+//        val progress = Progres()
+//        binding.setProgress(progress)
+//
+//        progress.porgress.set(21)
+
+//        binding.humSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
+//                binding.humText.text = seek.progress.toString()
+//            }
+//
+//            override fun onStartTrackingTouch(seek: SeekBar) {
+//
+//            }
+//
+//            override fun onStopTrackingTouch(seek: SeekBar) {
+//
+//            }
+//        })
+
 
 
 //        val  button_send: Button = findViewById(R.id.button_send)
@@ -177,3 +311,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+

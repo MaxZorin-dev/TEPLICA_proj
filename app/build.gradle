@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+
+    id 'kotlin-kapt'
 }
 
 android {
@@ -52,6 +54,7 @@ dependencies {
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation 'com.beust:klaxon:5.5'
     implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+    implementation 'com.github.warkiz:IndicatorSeekBar:v2.1.1'
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
     implementation libs.okhttp3

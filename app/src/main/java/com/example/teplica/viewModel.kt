@@ -1,25 +1,41 @@
 package com.example.teplica
 
 import android.util.Log
-import android.widget.SeekBar
+import android.widget.CompoundButton
+import androidx.databinding.Bindable
+import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.warkiz.widget.IndicatorSeekBar
+import com.warkiz.widget.OnSeekChangeListener
+import com.warkiz.widget.SeekParams
 
 
 class MainViewModel: ViewModel() {
 
-    var progressTemp = MutableLiveData<Int>().apply {
-        value = 0
+    val isChecked: MutableLiveData<Boolean> = MutableLiveData()
 
+    fun executeOnStatusChanged(switch: CompoundButton, isChecked: Boolean) {
+        Log.d("mLog","$isChecked")
     }
 
-    fun onValueChanged(progresValue: SeekBar) {
-        Log.d("mLog","${progresValue.progress}")
+
+    val liveData = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+    fun onSeeking(seekBar: IndicatorSeekBar?, seekParams: SeekParams) {
+        Log.d("mLog", "435345345")
+        Log.d("mLog", "onSeeking: " + seekBar?.progress)
     }
 
-//    fun onSeekBarChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-////        text.set("Your progress: $progress")
-//
-//    }
+    fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
+        Log.d("mLog", "onSeeking: " + seekBar.progress)
+    }
+
+    fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {
+        Log.d("mLog", "onSeeking: " + seekBar.progress)
+    }
 
 }
+

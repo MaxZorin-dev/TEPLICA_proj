@@ -8,6 +8,11 @@
         <variable
             name="vm"
             type="com.example.teplica.MainViewModel" />
+
+        <variable
+            name="progress"
+            type="com.example.teplica.Progres" />
+
     </data>
 
     <LinearLayout
@@ -174,10 +179,13 @@
                                 android:textSize="16dp" />
 
                             <Switch
+                                android:id="@+id/switchAuto"
                                 android:layout_width="fill_parent"
                                 android:layout_height="48dp"
                                 android:layout_gravity="right"
-                                android:theme="@style/SwitchBarColor" />
+                                android:theme="@style/SwitchBarColor"
+                                android:onCheckedChanged="@{vm::executeOnStatusChanged}"
+                                android:checked="@={vm.isChecked()}"/>
 
                         </LinearLayout>
 
@@ -225,22 +233,25 @@
                                     android:src="@drawable/temp" />
 
                                 <TextView
+                                    android:id="@+id/temptext"
                                     android:layout_width="42dp"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="4dp"
+                                    android:text="15"
                                     android:gravity="start"
-                                    android:text="20C"
                                     android:textColor="@color/black"
                                     android:textSize="16sp" />
 
+
                                 <SeekBar
+                                    android:id="@+id/seektemp"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:progress="1"
-                                    android:onProgressChanged="@{(seekBar, value, fromUser)->vm.onValueChanged(seekBar)}"
                                     android:max="35"
                                     android:min="15"
-                                    android:theme="@style/SeekBarColor" />
+                                    android:theme="@style/SeekBarColor"/>
+
+
 
                             </LinearLayout>
 
@@ -266,21 +277,23 @@
                                     android:src="@drawable/kap" />
 
                                 <TextView
+                                    android:id="@+id/humText"
                                     android:layout_width="42dp"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="4dp"
                                     android:gravity="start"
-                                    android:text="20%"
+                                    android:text="15"
                                     android:textColor="@color/black"
                                     android:textSize="16sp" />
 
                                 <SeekBar
+                                    android:id="@+id/seekhum"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:max="35"
+                                    android:max="100"
+                                    android:min="0"
+                                    android:theme="@style/SeekBarColor"/>/
 
-                                    android:min="15"
-                                    android:theme="@style/SeekBarColor" />
 
                             </LinearLayout>
 
@@ -337,6 +350,7 @@
                                     android:textSize="16sp" />
 
                                 <Switch
+                                    android:id="@+id/switchFan"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="right"
@@ -376,6 +390,7 @@
                                     android:textSize="16sp" />
 
                                 <Switch
+                                    android:id="@+id/switchLight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="right"
@@ -415,6 +430,7 @@
                                     android:textSize="16sp" />
 
                                 <Switch
+                                    android:id="@+id/switchPump"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="right"

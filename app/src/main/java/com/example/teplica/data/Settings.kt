@@ -3,10 +3,10 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class settings(
-    val temp: Int,
-    val grass: Int,
-    val cooling: Int, //bool
-    val light: Int, //bool
-    val watering: Int, //bool
-    val auto_mode: Int //bool
+    var temp: Int,
+    var grass: Int,
+    var cooling: Int, //bool
+    var light: Int, //bool
+    var watering: Int, //bool
+    var auto_mode: Int //bool
 )
