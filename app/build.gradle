@@ -31,7 +31,6 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures{
-        //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
     viewBinding {
@@ -52,7 +51,7 @@ dependencies {
     implementation "io.ktor:ktor-client-websockets:2.3.8"
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation 'com.beust:klaxon:5.5'
-    implementation libs.hellocharts.library
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
     implementation libs.okhttp3
