@@ -7,9 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.warkiz.widget.IndicatorSeekBar
-import com.warkiz.widget.OnSeekChangeListener
-import com.warkiz.widget.SeekParams
+
 
 
 class MainViewModel: ViewModel() {
@@ -24,18 +22,7 @@ class MainViewModel: ViewModel() {
     val liveData = MutableLiveData<Boolean>().apply {
         value = false
     }
-    fun onSeeking(seekBar: IndicatorSeekBar?, seekParams: SeekParams) {
-        Log.d("mLog", "435345345")
-        Log.d("mLog", "onSeeking: " + seekBar?.progress)
-    }
 
-    fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
-        Log.d("mLog", "onSeeking: " + seekBar.progress)
-    }
-
-    fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {
-        Log.d("mLog", "onSeeking: " + seekBar.progress)
-    }
 
 }
 

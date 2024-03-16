@@ -1,9 +1,6 @@
 package com.example.teplica.data
 
 import androidx.databinding.BindingAdapter
-import com.warkiz.widget.IndicatorSeekBar
-import com.warkiz.widget.OnSeekChangeListener
-import com.warkiz.widget.SeekParams
 
 
 //class IndicatorSeekBarBindingAdapter {

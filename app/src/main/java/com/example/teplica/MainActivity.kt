@@ -4,100 +4,85 @@ package com.example.teplica
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import com.beust.klaxon.Klaxon
 import com.example.teplica.data.settings
+import com.example.teplica.data.state
+import com.example.teplica.data.webInfo
 import com.example.teplica.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-
-import com.warkiz.widget.IndicatorSeekBar
-import com.warkiz.widget.OnSeekChangeListener
-import com.warkiz.widget.SeekParams
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
-
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var ws:WebSocket
+    private lateinit var ws: WebSocket
     private lateinit var chart: LineChart
-    private val defaultSettings = settings(24,90,0,0,0, 0)
-
-
-    fun connect(){
-        val client =  OkHttpClient()
-        val base_uri = "ws://192.168.112.22:8080"
-        val id = 123
-
-        val request: Request = Request
-            .Builder()
-            .url("${base_uri}/ws/mob_${id}")
-            .build()
-
-        val listener = PieSocketListener()
-        ws= client.newWebSocket(request, listener)
-    }
-
-    fun setDefaultSettings(){
-        binding.temptext.text = defaultSettings.temp.toString()
-        binding.seektemp.setProgress(defaultSettings.temp)
-
-        binding.humText.text =defaultSettings.grass.toString()
-        binding.seekhum.setProgress(defaultSettings.grass)
-
-        binding.switchFan.setChecked(defaultSettings.cooling.toString().toBoolean())
-        binding.switchLight.setChecked(defaultSettings.light.toString().toBoolean())
-        binding.switchPump.setChecked(defaultSettings.watering.toString().toBoolean())
-    }
-
-    fun setPeopleSettings(settings: settings){
-        Log.d("mLog","${settings}")
-        binding.temptext.text = settings.temp.toString()
-        binding.seektemp.setProgress(settings.temp)
-
-        binding.humText.text =settings.grass.toString()
-        binding.seekhum.setProgress(settings.grass)
-
-        binding.switchFan.setChecked(settings.cooling.toString().toBoolean())
-        binding.switchLight.setChecked(settings.light.toString().toBoolean())
-        binding.switchPump.setChecked(settings.watering.toString().toBoolean())
-    }
-
+    private val defaultSettings = settings(26, 70, 0, 0, 0, 1)
+    private val settingsPeople = settings(15, 0, 0, 0, 0, 0)
+    private val stateUI = state(0,0,0,0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        chart = binding.lineChart
-        binding.switchPump.setChecked(true)
 
-        val settingsPeople = settings(15,0,0,0,0,0)
+
+        chart = binding.lineChart
+
+        viewLogic()
+        connect()
+        webThread.start()
+    }
+
+    val webThread = Thread{
+        try {
+            while (true) {
+                val jsonData = Klaxon().toJsonString(webInfo("server_settings", settingsPeople))
+                ws.send(jsonData)
+                Thread.sleep(5000)
+            }
+        }catch (e:Exception){
+            Log.d("mLog","$e")
+        }
+    }
+
+    private fun intToBoolean(value: Int): Boolean = if ( value == 1) true else false
+
+    fun viewLogic(){
+        setDefaultSettings()
+        binding.switchAuto.isChecked = true
 
         binding.seekhum.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
-                binding.humText.text = seek.progress.toString()
-                settingsPeople.grass = seek.progress
+                if (settingsPeople.auto_mode == 0) {
+                    binding.humText.text = seek.progress.toString()
+                    settingsPeople.grass = seek.progress
+                }
             }
 
             override fun onStartTrackingTouch(seek: SeekBar) {
-
             }
 
             override fun onStopTrackingTouch(seek: SeekBar) {
-
             }
         })
 
         binding.seektemp.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
-                binding.temptext.text = seek.progress.toString()
-                settingsPeople.temp = seek.progress
+                if (settingsPeople.auto_mode == 0) {
+                    binding.temptext.text = seek.progress.toString()
+                    settingsPeople.temp = seek.progress
+                }
             }
 
             override fun onStartTrackingTouch(seek: SeekBar) {
@@ -112,187 +97,164 @@ class MainActivity : AppCompatActivity(){
                 settingsPeople.auto_mode = 1
                 setDefaultSettings()
             } else {
-//                settingsPeople.auto_mode = 0
+                settingsPeople.auto_mode = 0
                 setPeopleSettings(settingsPeople)
             }
         }
 
         binding.switchFan.setOnClickListener {
-            if (binding.switchFan.isChecked()) {
-                settingsPeople.cooling = 1
-            } else {
-                settingsPeople.cooling = 0
-                Log.d("mLog","${settingsPeople}")
+            if (settingsPeople.auto_mode == 0) {
+                if (binding.switchFan.isChecked()) {
+                    settingsPeople.cooling = 1
+
+                } else {
+                    settingsPeople.cooling = 0
+
+                }
             }
         }
 
         binding.switchLight.setOnClickListener {
-            if (binding.switchLight.isChecked()) {
-                settingsPeople.light = 1
-                Log.d("mLog","on")
-            } else {
-                settingsPeople.light = 0
-                Log.d("mLog","off")
+            if (settingsPeople.auto_mode == 0) {
+                if (binding.switchLight.isChecked()) {
+                    settingsPeople.light = 1
+
+                } else {
+
+                    settingsPeople.light = 0
+
+                }
             }
         }
 
         binding.switchPump.setOnClickListener {
-            if (binding.switchPump.isChecked()) {
-                settingsPeople.watering = 1
-                Log.d("mLog","${settingsPeople}")
-            } else {
-                settingsPeople.watering = 0
+            if (settingsPeople.auto_mode == 0) {
+                if (binding.switchPump.isChecked()) {
+                    settingsPeople.watering = 1
 
+                } else {
+                    settingsPeople.watering = 0
+
+                }
             }
         }
 
-//
-//        humBar.setOnSeekChangeListener(object : OnSeekChangeListener {
-//            override fun onSeeking(seekParams: SeekParams) {
-//
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: IndicatorSeekBar) {
-////                onStartTrackingTouch(seekBar)
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: IndicatorSeekBar) {
-////                onStopTrackingTouch(seekBar)
-//            }
-//        })
-
         drawLineChart()
+    }
 
+    fun vison(param : Boolean){
+        binding.visonParam.isVisible = param
+        binding.visonTools.isVisible = param
+        binding.visonToolsText.isVisible = param
+        binding.visonParamText.isVisible = param
+    }
 
+    fun connect(){
+        val client =  OkHttpClient()
+        val base_uri = "ws://192.168.1.78:8080"
+        val id = 123
 
+        val request: Request = Request
+            .Builder()
+            .url("${base_uri}/ws/mob_${id}")
+            .build()
 
-//        val progress = Progres()
-//        binding.setProgress(progress)
-//
-//        progress.porgress.set(21)
-
-//        binding.humSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
-//                binding.humText.text = seek.progress.toString()
-//            }
-//
-//            override fun onStartTrackingTouch(seek: SeekBar) {
-//
-//            }
-//
-//            override fun onStopTrackingTouch(seek: SeekBar) {
-//
-//            }
-//        })
-
-
-
-//        val  button_send: Button = findViewById(R.id.button_send)
-//        val  button_connect: Button = findViewById(R.id.button_connect)
-//
-//
-//
-//        button_connect.setOnClickListener {
-//            connect()
-//        }
-//
-//        val jsonData = Klaxon().toJsonString(webInfo("server_settings", settings(1,1,0,1, 0, 1)))
-//
-//        button_send.setOnClickListener{
-//
-//            ws.send(jsonData)
-//
-//
-//        }
-
-
+        val listener = PieSocketListener(this, {x -> setWebSettings(x)} , {x -> setState(x)} )
+        listener.setData(stateUI, settingsPeople)
+        ws = client.newWebSocket(request, listener)
 
     }
-//    private fun drawLineChart() {
-//        val lineChart = findViewById<LineChart>(R.id.lineChart)
-//        val lineEntries: List<Entry> = getDataSet()
-//        val lineDataSet = LineDataSet(lineEntries, "Work")
-//        lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
-//        lineDataSet.lineWidth = 2f
-//        lineDataSet.setDrawValues(false)
-//        lineDataSet.color = Color.CYAN
-//        lineDataSet.circleRadius = 6f
-//        lineDataSet.circleHoleRadius = 3f
-//        lineDataSet.setDrawCircles(false)
-//        lineDataSet.setDrawHighlightIndicators(true)
-//        lineDataSet.isHighlightEnabled = true
-//        lineDataSet.highLightColor = Color.CYAN
-//        lineDataSet.valueTextSize = 12f
-//        lineDataSet.valueTextColor = Color.DKGRAY
-//        lineDataSet.mode = LineDataSet.Mode.STEPPED
-//
-//        val lineData = LineData(lineDataSet)
-//        lineChart.description.textSize = 12f
-//        lineChart.description.isEnabled = false
-//        lineChart.animateY(1000)
-//        lineChart.data = lineData
-//
-//        // Setup X Axis
-//        val xAxis = lineChart.xAxis
-//        xAxis.position = XAxis.XAxisPosition.TOP
-//        xAxis.isGranularityEnabled = true
-//        xAxis.granularity = 1.0f
-//        xAxis.xOffset = 1f
-//        xAxis.labelCount = 25
-//        xAxis.axisMinimum = 0f
-//        xAxis.axisMaximum = 24f
-//
-//        // Setup Y Axis
-//        val yAxis = lineChart.axisLeft
-//        yAxis.axisMinimum = 0f
-//        yAxis.axisMaximum = 3f
-//        yAxis.granularity = 1f
-//
-//        val yAxisLabel = ArrayList<String>()
-//        yAxisLabel.add(" ")
-//        yAxisLabel.add("Rest")
-//        yAxisLabel.add("Work")
-//        yAxisLabel.add("2-up")
-//
-//        lineChart.axisLeft.setCenterAxisLabels(true)
-//        lineChart.axisLeft.valueFormatter = object : ValueFormatter() {
-//            override fun getAxisLabel(value: Float, axis: AxisBase): String {
-//                if (value == -1f || value >= yAxisLabel.size) return ""
-//                return yAxisLabel[value.toInt()]
-//            }
-//        }
-//
-//        lineChart.axisRight.isEnabled = false
-//        lineChart.invalidate()
-//    }
 
+    fun setDefaultSettings(){
+        binding.temptext.text = defaultSettings.temp.toString()
+        binding.seektemp.setProgress(defaultSettings.temp)
+        binding.seektemp.isEnabled = false
 
+        binding.humText.text = defaultSettings.grass.toString()
+        binding.seekhum.setProgress(defaultSettings.grass)
+        binding.seekhum.isEnabled = false
+
+        binding.switchFan.setChecked(intToBoolean(defaultSettings.cooling))
+        binding.switchLight.setChecked(intToBoolean(defaultSettings.light))
+        binding.switchPump.setChecked(intToBoolean(defaultSettings.watering))
+
+        binding.switchFan.isEnabled = false
+        binding.switchLight.isEnabled = false
+        binding.switchPump.isEnabled = false
+    }
+
+    fun setPeopleSettings(settings: settings){
+        Log.d("mLog","${settings}")
+
+        binding.seektemp.isEnabled = true
+        binding.temptext.text = settings.temp.toString()
+        binding.seektemp.setProgress(settings.temp)
+
+        binding.seekhum.isEnabled = true
+        binding.humText.text = settings.grass.toString()
+        binding.seekhum.setProgress(settings.grass)
+
+        binding.switchFan.isEnabled = true
+        binding.switchLight.isEnabled = true
+        binding.switchPump.isEnabled = true
+
+        binding.switchFan.setChecked(intToBoolean(settings.cooling))
+        binding.switchLight.setChecked(intToBoolean(settings.light))
+        binding.switchPump.setChecked(intToBoolean(settings.watering))
+    }
+    fun setWebSettings(settings: settings){
+        if (settings.auto_mode == 1){
+            binding.switchAuto.isChecked = true
+            setDefaultSettings()
+        }else{
+            binding.switchAuto.isChecked = false
+            setPeopleSettings(settings)
+        }
+
+    }
+
+    fun setState(state: state){
+        binding.progressWater.progress = state.water_level
+        binding.topCardTemp.text = state.temp.toFloat().toString()
+        binding.progressHum.progress = state.humidity_air
+    }
 
     fun drawLineChart() {
-
-        // Массив координат точек
         val entriesFirst = ArrayList<Entry>()
-        entriesFirst.add(Entry(1f, 5f))
-        entriesFirst.add(Entry(2f, 2f))
-        entriesFirst.add(Entry(3f, 1f))
-        entriesFirst.add(Entry(4f, -3f))
-        entriesFirst.add(Entry(5f, 4f))
-        entriesFirst.add(Entry(6f, 1f))
+        // Массив координат точек
+        entriesFirst.add(Entry(1f, 23f))
+        entriesFirst.add(Entry(2f, 25f))
+        entriesFirst.add(Entry(3f, 26f))
+        entriesFirst.add(Entry(4f, 25f))
+        entriesFirst.add(Entry(5f, 27f))
+        entriesFirst.add(Entry(6f, 28f))
+        entriesFirst.add(Entry(7f, 26f))
+        entriesFirst.add(Entry(8f, 25f))
+        entriesFirst.add(Entry(9f, 26f))
+        entriesFirst.add(Entry(10f, 25f))
+        entriesFirst.add(Entry(11f, 27f))
+        entriesFirst.add(Entry(12f, 28f))
 
-        val datasetFirst = LineDataSet(entriesFirst, "График первый")
+        val datasetFirst = LineDataSet(entriesFirst, "Температура")
 
         datasetFirst.setDrawFilled(true)
 
         val entriesSecond = ArrayList<Entry>()
-        entriesSecond.add(Entry(0.5f, 0f))
-        entriesSecond.add(Entry(2.5f, 2f))
-        entriesSecond.add(Entry(3.5f, 1f))
-        entriesSecond.add(Entry(3.6f, 2f))
-        entriesSecond.add(Entry(4f, 0.5f))
-        entriesSecond.add(Entry(5.1f, -0.5f))
+        entriesSecond.add(Entry(1f, 94f))
+        entriesSecond.add(Entry(2f, 85f))
+        entriesSecond.add(Entry(3f, 70f))
+        entriesSecond.add(Entry(4f, 80f))
+        entriesSecond.add(Entry(5f, 75f))
+        entriesSecond.add(Entry(6f, 90f))
+        entriesSecond.add(Entry(7f, 87f))
+        entriesSecond.add(Entry(8f, 78f))
+        entriesSecond.add(Entry(9f, 98f))
+        entriesSecond.add(Entry(10f, 80f))
+        entriesSecond.add(Entry(11f, 67f))
+        entriesSecond.add(Entry(12f, 60f))
 
 
-        val datasetSecond = LineDataSet(entriesSecond, "График второй")
+        val datasetSecond = LineDataSet(entriesSecond, "Влажность")
 
         datasetSecond.color = Color.GREEN
 
@@ -312,3 +274,35 @@ class MainActivity : AppCompatActivity(){
 
 }
 
+//// Массив координат точек
+//val entriesFirst = ArrayList<Entry>()
+//entriesFirst.add(Entry(1f, 23f))
+//entriesFirst.add(Entry(2f, 25f))
+//entriesFirst.add(Entry(3f, 26f))
+//entriesFirst.add(Entry(4f, 25f))
+//entriesFirst.add(Entry(5f, 27f))
+//entriesFirst.add(Entry(6f, 28f))
+//entriesFirst.add(Entry(7f, 26f))
+//entriesFirst.add(Entry(8f, 25f))
+//entriesFirst.add(Entry(9f, 26f))
+//entriesFirst.add(Entry(10f, 25f))
+//entriesFirst.add(Entry(11f, 27f))
+//entriesFirst.add(Entry(12f, 28f))
+//
+//val datasetFirst = LineDataSet(entriesFirst, "Температура")
+//
+//datasetFirst.setDrawFilled(true)
+//
+//val entriesSecond = ArrayList<Entry>()
+//entriesSecond.add(Entry(1f, 94f))
+//entriesSecond.add(Entry(2f, 85f))
+//entriesSecond.add(Entry(3f, 70f))
+//entriesSecond.add(Entry(4f, 80f))
+//entriesSecond.add(Entry(5f, 75f))
+//entriesSecond.add(Entry(6f, 90f))
+//entriesSecond.add(Entry(7f, 87f))
+//entriesSecond.add(Entry(8f, 78f))
+//entriesSecond.add(Entry(9f, 98f))
+//entriesSecond.add(Entry(10f, 80f))
+//entriesSecond.add(Entry(11f, 67f))
+//entriesSecond.add(Entry(12f, 60f))

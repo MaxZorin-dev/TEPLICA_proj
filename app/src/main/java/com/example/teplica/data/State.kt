@@ -1,8 +1,8 @@
 package com.example.teplica.data
 
 data class state(
-    val temp: Int,
-    val humidity_air:Int,
-    val lighting_level:Int,
-    val water_level:Int
+    var temp: Int,
+    var humidity_air:Int,
+    var lighting_level:Int,
+    var water_level:Int
 )
