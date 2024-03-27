@@ -27,15 +27,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var ws: WebSocket
     private lateinit var chart: LineChart
+    private var savesettings = settings(15, 0, 0, 0, 0, 0)
     private val defaultSettings = settings(26, 70, 0, 0, 0, 1)
     private val settingsPeople = settings(15, 0, 0, 0, 0, 0)
     private val stateUI = state(0,0,0,0)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         chart = binding.lineChart
 
@@ -47,8 +46,12 @@ class MainActivity : AppCompatActivity() {
     val webThread = Thread{
         try {
             while (true) {
-                val jsonData = Klaxon().toJsonString(webInfo("server_settings", settingsPeople))
-                ws.send(jsonData)
+                if (settingsPeople != savesettings) {
+                    savesettings = settingsPeople.copy()
+                    Log.d("mLog","$savesettings")
+                    val jsonData = Klaxon().toJsonString(webInfo("server_settings", settingsPeople))
+                    ws.send(jsonData)
+                }
                 Thread.sleep(5000)
             }
         }catch (e:Exception){
